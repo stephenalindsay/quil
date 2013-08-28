@@ -1,16 +1,22 @@
-(defproject quil "1.6.0"
-  :description "(mix Processing Clojure)"
-  :url "http://github.com/quil/quil"
-  :mailing-list {:name "Quil Mailing List"
-                 :archive "https://groups.google.com/forum/?fromgroups#!forum/clj-processing"
-                 :post "clj-processing@googlegroups.com"}
+(defproject quil.js "0.1.0"
+  :description "Port of Quil to ClojureScript"
+  :url "http://github.com/stephenalindsay/quil.js"
   :license {:name "Common Public License - v 1.0"
             :url "http://www.opensource.org/licenses/cpl1.0"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [org.clojars.processing-core/org.processing.core "1.5.1"]
-                 [org.clojars.processing-core/org.processing.gluegen-rt "1.5.1"]
-                 [org.clojars.processing-core/org.processing.jogl "1.5.1"]
-                 [org.clojars.processing-core/org.processing.opengl "1.5.1"]
-                 [org.clojars.processing-core/org.processing.itext "1.5.1"]
-                 [org.clojars.processing-core/org.processing.pdf "1.5.1"]]
-  :aot [quil.applet])
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [compojure "1.1.5"]
+                 [hiccup "1.0.4"]]
+  :plugins [[lein-cljsbuild "0.3.2"]
+            [lein-ring "0.8.5"]]
+  :hooks [leiningen.cljsbuild]
+  :source-paths ["src/clj"]
+  :cljsbuild {
+    :builds {
+      :main {
+        :source-paths ["src/cljs" "src/clj"]
+        :compiler {:output-to "resources/public/js/cljs.js"
+                   :optimizations :simple
+                   :pretty-print true}
+        :jar true}}}
+  :main quiljs.server
+  :ring {:handler quiljs.server/app})
